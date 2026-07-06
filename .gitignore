@@ -1,0 +1,8 @@
+*.asv
+*.log
++*/
+*_dynamic.m
+*_static.m
+*_results.mat
+*.eps
+*.pdf
