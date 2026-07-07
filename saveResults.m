@@ -8,6 +8,15 @@ if ~isstr(results)
 end
 eval([results '= struct([]);']);
 
+for i = 1:M_.endo_nbr
+    if iscell(M_.endo_names)
+        var_name = M_.endo_names{i};
+    else
+        var_name = strtrim(M_.endo_names(i,:));
+    end
+    eval([var_name ' = oo_.endo_simul(i, :)'';']);
+end
+
 %% Create and save help variables for report
 blag  =[bo b(1:1001)']'; 
 dclag = [dco dc(1:1001)']';
@@ -79,14 +88,13 @@ tfpngr = 100*(a_n - a_no)/a_no;                         % Nontradable TFP growth
 %% Save variables to results_*
 eval([results '(1).cad = 100*cad./ynom;']);
 for i=1:length(M_.endo_names)
-    eval([results '.' M_.endo_names(i,:) '=' mat2str(oo_.endo_simul(i,:)') ';'])
+    eval([results '.' M_.endo_names{i} '=' mat2str(oo_.endo_simul(i,:)') ';'])
 end
 for i=1:length(M_.param_names)
-    eval([results '.' M_.param_names(i,:) '=' num2str(M_.params(i,:)) ';']);
+    eval([results '.' M_.param_names{i} '=' num2str(M_.params(i,:)) ';']);
 end
 for i=1:length(M_.exo_names)
-    eval([results '.' M_.exo_names(i,:) '=' mat2str(oo_.exo_simul(:,i)') ';'])
-  
+    eval([results '.' M_.exo_names{i} '=' mat2str(oo_.exo_simul(:,i)') ';'])
 end
 %% Anticipation effect
 nn_natdis = natdis2_var(1,1) ;

@@ -6,9 +6,10 @@
 clear all; 
 clc; 
 itermax = 30;
-path_to_toolkit = pwd;
-addpath(strcat(path_to_toolkit,'\epackages\dynare\4.5.6\matlab'));
-addpath(strcat(path_to_toolkit,'\epackages\compecon2011\CEtools'));
+addpath(fullfile(pwd, 'epackages', 'compecon2011', 'CEtools'));
+if exist('dynare', 'file') == 0
+    error('Dynare is missing. Please add your local Dynare/matlab folder to your path before running this script.');
+end
 
 % Disable warnings 
 warning('off','all');

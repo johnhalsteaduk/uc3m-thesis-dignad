@@ -24,7 +24,11 @@ parameters
 load dsa_params.mat;          
 
 for i=1:length(M_.params)
-    deep_parameter_name = M_.param_names(i,:);
+    if iscell(M_.param_names)
+        deep_parameter_name = M_.param_names{i}; 
+    else
+        deep_parameter_name = strtrim(M_.param_names(i,:));
+    end
     eval(['M_.params(i)  = ' deep_parameter_name ' ;'])
 end   
 
@@ -106,6 +110,6 @@ hl =hl_ini;
 end;
 
 steady;
-resid(1)
+resid;
 check;
 %------------------------

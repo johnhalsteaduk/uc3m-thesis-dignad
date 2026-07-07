@@ -115,9 +115,9 @@ for aaa = ['exo'; 'dom'; 'com'; 'all']'
                 end
                 fileName = ['results_' aaa' '_' bbb '_temp' int2str(ijj) '_perm' int2str(jji) '_',datestr(now,'ddmmmyyyy'),'.xlsx'];
                 labels = ['Years'; cellstr(select_names2)]';
-                xlswrite(fileName,labels,['res_' aaa' '_' bbb '_t' int2str(ijj) '_p' int2str(jji)]);
-                export_scenario = [time_line(1:NN) select_simul_matrix(linspace(1,NN,NN)',:)];
-                xlswrite(fileName,export_scenario,['res_' aaa' '_' bbb '_t' int2str(ijj) '_p' int2str(jji)],'A2'); 
+                writecell(labels, fileName, 'Sheet', ['res_' aaa' '_' bbb '_t' int2str(ijj) '_p' int2str(jji)]);
+                export_scenario = [time_line(1:NN) select_simul_matrix(1:NN, :)];
+                writematrix(export_scenario, fileName, 'Sheet', ['res_' aaa' '_' bbb '_t' int2str(ijj) '_p' int2str(jji)], 'Range', 'A2'); 
             end
             end
         end
@@ -131,8 +131,12 @@ for aaa = ['exo'; 'dom'; 'com'; 'all']'
             for jji = alt_perm
             if isequal(exist(['results_' aaa' '_' bbb '_temp' int2str(ijj) '_perm' int2str(jji) '_',datestr(now,'ddmmmyyyy'),'.xlsx'],'file'),0)
               elseif exist(['results_' aaa' '_' bbb '_temp' int2str(ijj) '_perm' int2str(jji) '_',datestr(now,'ddmmmyyyy'),'.xlsx'],'file')
-                [xls_ndata, xls_text, xls_alldata] = xlsread(['results_' aaa' '_' bbb '_temp' int2str(ijj) '_perm' int2str(jji) '_',datestr(now,'ddmmmyyyy'),'.xlsx'],['res_' aaa' '_' bbb '_t' int2str(ijj) '_p' int2str(jji)]);
-                xlswrite(fileName2,xls_alldata,['Financing_' aaa' '_Option' int2str(ijj) ]);
+                fName = ['results_' aaa' '_' bbb '_temp' int2str(ijj) '_perm' int2str(jji) '_' datestr(now,'ddmmmyyyy') '.xlsx'];
+                sName = ['res_' aaa' '_' bbb '_t' int2str(ijj) '_p' int2str(jji)];
+                xls_alldata = readcell(fName, 'Sheet', sName);
+                xls_ndata   = readmatrix(fName, 'Sheet', sName);
+                xls_text    = {};
+                writecell(xls_alldata, fileName2, 'Sheet', ['Financing_' aaa' '_Option' int2str(ijj) ]);
             else 
                 disp('Do not forget that you can save different scenarios into Excel.');
             end
@@ -142,10 +146,9 @@ for aaa = ['exo'; 'dom'; 'com'; 'all']'
 end
 %% File back to previous folder
 delete results_*.xlsx
-xls_delete_sheets(fileName2);
 mkdir('Excel output');
-mkdir('Excel output',datestr(now,'ddmmmyyyy'));
-movefile(fileName2,[cd,['\Excel output\' datestr(now,'ddmmmyyyy')]]);
+mkdir('Excel output', datestr(now,'ddmmmyyyy'));
+mkdir(fullfile(pwd, 'Excel output', datestr(now,'ddmmmyyyy'))); movefile(fileName2,[cd,['\Excel output\' datestr(now,'ddmmmyyyy')]]);
 disp([fileName2 ' saved in the Excel output folder.']);
 
 end
