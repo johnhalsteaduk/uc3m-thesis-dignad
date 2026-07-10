@@ -170,8 +170,8 @@ if any(ismember(list(:,9:11),aaa'))
     fig_title2 = [fig_title,datestr(now,'_ddmmmyyyy')];
     saveas(gcfig2, [fig_title2,'.fig']);
     exportgraphics(gcfig2, [fig_title2,'.pdf'], 'ContentType', 'vector');
-    movefile([fig_title2,'.fig'],[cd,['/matlab figures/' datestr(now,'ddmmmyyyy')]]);
-    movefile([fig_title2,'.pdf'],[cd,['/pdf figures/' datestr(now,'ddmmmyyyy')]]);
+    movefile([fig_title2,'.fig'], fullfile(pwd, 'matlab figures', datestr(now,'ddmmmyyyy')));
+    movefile([fig_title2,'.pdf'], fullfile(pwd, 'pdf figures', datestr(now,'ddmmmyyyy')));
     disp([[fig_title2,'.fig'] ' and ' [fig_title2,'.pdf'] ' saved in the Figures output folder.']);
 end
 end
