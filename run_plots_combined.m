@@ -110,7 +110,7 @@ for aaa = char(alt_scenar)'; %['exo';'dom'; 'com']'
         scenari = 'dom & ext';
     end
     if any(ismember(list(:,9:11),aaa'))
-        fig_title = ['Simulation results '];
+        fig_title = ['Simulation results ' scenari ' '];
         h = figure('name', fig_title,'Position', [800, 0, 1200, 900]);
         curve = zeros(1,nnj);
     end 

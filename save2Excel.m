@@ -148,7 +148,8 @@ end
 delete results_*.xlsx
 mkdir('Excel output');
 mkdir('Excel output', datestr(now,'ddmmmyyyy'));
-mkdir(fullfile(pwd, 'Excel output', datestr(now,'ddmmmyyyy'))); movefile(fileName2,[cd,['\Excel output\' datestr(now,'ddmmmyyyy')]]);
+mkdir(fullfile(pwd, 'Excel output', datestr(now,'ddmmmyyyy'))); 
+movefile(fileName2, fullfile(pwd, 'Excel output', datestr(now,'ddmmmyyyy')));
 disp([fileName2 ' saved in the Excel output folder.']);
 
 end
