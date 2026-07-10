@@ -6,3 +6,7 @@
 *_results.mat
 *.eps
 *.pdf
+*.mat
+*.log
+*.pdf
+mergedModel/
