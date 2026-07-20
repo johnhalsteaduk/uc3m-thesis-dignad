@@ -67,6 +67,7 @@ all_strs = {'pubinvgdp' % Public infrastructure investment (% of GDP)
             'a_n' % TFP in the NT sector (level)
             'a_x' % TFP in the T sector (level)
             'hlpercent' % Labor Income Tax (%)
+            's' % Public Investment Efficiency
             };             
 all_names = char('Public Infrastructure Inv. (/% of GDP)', 'Public Adaptation Inv. (/% of GDP)', 'Public Effective Capital Growth (/% dev. from SS)', ...
             'Public Eff. Adaptation Cap. Gr. (/% dev. from SS)', 'Real GDP Growth (/% YoY)',... 
@@ -81,7 +82,9 @@ all_names = char('Public Infrastructure Inv. (/% of GDP)', 'Public Adaptation In
             'Public Current Expenditures (/% of GDP)', 'Natural disaster fund (/% of GDP)', 'Real GDP (level)', ...
             'Public Standard Capital (level)', 'Public Effective Standard Capital (level)', 'Public Adaptation Capital (level)', 'Public Effective Adaptation Capital (level)', ...
             'Private Capital (level)', 'Private Capital in NT (level)', 'Private Capital in T (level)', ...
-            'TFP in the NT sector (level)', 'TFP in the T sector (level)', 'Labor Income Tax (/%)' );       
+            'TFP in the NT sector (level)', 'TFP in the T sector (level)', 'Labor Income Tax (/%)', 'Public Investment Efficiency (level)' );      
+
+level_vars = {'zi', 'k', 'a_n', 'a_x', 's'};
 
 %% Graph comparing financing scenarios and shocks
 
@@ -143,21 +146,30 @@ for aaa = char(alt_scenar)'; %['exo';'dom'; 'com']'
                             eval(['results_' aaa' '_' bbb '_temp' int2str(ijj),'_perm' int2str(jji) '.za']) eval(['results_' aaa' '_' bbb '_temp' int2str(ijj),'_perm' int2str(jji) '.zae']) ...
                             eval(['results_' aaa' '_' bbb '_temp' int2str(ijj),'_perm' int2str(jji) '.k']) eval(['results_' aaa' '_' bbb '_temp' int2str(ijj),'_perm' int2str(jji) '.kn']) eval(['results_' aaa' '_' bbb '_temp' int2str(ijj),'_perm' int2str(jji) '.kx']) ...
                             eval(['results_' aaa' '_' bbb '_temp' int2str(ijj),'_perm' int2str(jji) '.a_n']) eval(['results_' aaa' '_' bbb '_temp' int2str(ijj),'_perm' int2str(jji) '.a_x'])...
-                            eval(['results_' aaa' '_' bbb '_temp' int2str(ijj),'_perm' int2str(jji) '.hlpercent'])];                                                       
+                            eval(['results_' aaa' '_' bbb '_temp' int2str(ijj),'_perm' int2str(jji) '.hlpercent']) eval(['results_' aaa' '_' bbb '_temp' int2str(ijj),'_perm' int2str(jji) '.s'])];                                                       
                 for iii = 1:mmm
                     ind=find(ismember(all_strs, select_strs(iii)));
                     select_simulations_matrix(:,iii) = all_simulations_matrix(:,ind);
                 end                
                 for j = 1:mmm                     
                     subplot(rrr,ccc,j); 
-                          curve(iji) = plot(time_line(1:NN),select_simulations_matrix(1:NN,j),'LineWidth',2,'DisplayName',[bbb ' - ' scenari ', ' eval(['name_path' int2str(ijj)]) ' temp. shock. '] ); hold on; 
-                          title(select_names(j,:),'FontSize',10,'Interpreter','latex');
-                          grid on;
-                          xlim([startdate enddate]);
-                          xlabel('$years$','FontSize', 8, 'Interpreter', 'latex')
-                          ylabel('','FontSize', 8,'Interpreter','latex')
-                          set(gca,'FontSize',8,'TickLabelInterpreter','latex')
-                          set(gca,'LineStyleOrder',mrk(iji))
+                        y_data = select_simulations_matrix(1:NN,j);
+                        
+                        var_name = strtrim(select_strs{j});
+                        level_vars = {'zi', 'k', 'a_n', 'a_x', 's'};
+
+                        if ismember(var_name, level_vars)
+                            ss_value = y_data(1);
+                            y_data = (y_data - ss_value) / ss_value * 100;
+                        end
+                        curve(iji) = plot(time_line(1:NN),select_simulations_matrix(1:NN,j),'LineWidth',2,'DisplayName',[bbb ' - ' scenari ', ' eval(['name_path' int2str(ijj)]) ' temp. shock. '] ); hold on; 
+                        title(select_names(j,:),'FontSize',10,'Interpreter','latex');
+                        grid on;
+                        xlim([startdate enddate]);
+                        xlabel('$years$','FontSize', 8, 'Interpreter', 'latex')
+                        ylabel('','FontSize', 8,'Interpreter','latex')
+                        set(gca,'FontSize',8,'TickLabelInterpreter','latex')
+                        set(gca,'LineStyleOrder',mrk(iji))
                 end
             end
             end
